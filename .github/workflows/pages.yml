@@ -23,7 +23,8 @@ jobs:
         with:
           python-version: '3.14'
       - name: Install pinned speech tools
-        run: python -m pip install --only-binary=:all: --require-hashes -r tools/edge-requirements.lock
+        run: |
+          python -m pip install --only-binary=:all: --require-hashes -r tools/edge-requirements.lock
       - name: Prepare dialogue and character voices
         run: |
           node tools/edge-plan.cjs edge-plan.json
