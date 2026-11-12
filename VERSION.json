@@ -1,0 +1,40 @@
+{
+  "version": "0.3.0-hd-preview",
+  "newImageCount": 23,
+  "sourcePortraitDefinitionsMapped": 45,
+  "storyEvents": 189,
+  "browserViewports": [
+    [
+      390,
+      844
+    ],
+    [
+      320,
+      740
+    ],
+    [
+      844,
+      390
+    ],
+    [
+      1024,
+      768
+    ],
+    [
+      1280,
+      800
+    ],
+    [
+      1440,
+      900
+    ],
+    [
+      1920,
+      1080
+    ]
+  ],
+  "endingRoutesPassed": 2,
+  "voiceLifecycleChecksPassed": 10,
+  "formalVoiceFiles": 0,
+  "physicalPhoneTested": false
+}
