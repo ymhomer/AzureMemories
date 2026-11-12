@@ -1,4 +1,4 @@
-name: Deploy Azure Memories to GitHub Pages
+name: Deploy Azure Memories Chinese voices to GitHub Pages
 on:
   push:
     branches: [main]
@@ -12,16 +12,42 @@ concurrency:
   cancel-in-progress: false
 jobs:
   deploy:
+    timeout-minutes: 90
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - name: Install pinned speech tools
+        run: python -m pip install --only-binary=:all: --require-hashes -r tools/edge-requirements.lock
+      - name: Prepare dialogue and character voices
+        run: |
+          node tools/edge-plan.cjs edge-plan.json
+          python tools/build-edge-site.py
+      - uses: actions/cache/restore@v4
+        id: voice-cache
+        with:
+          path: .edge-audio-cache
+          key: ${{ runner.os }}-edge-v4-${{ hashFiles('edge-plan.json', 'tools/edge-requirements.lock') }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            ${{ runner.os }}-edge-v4-${{ hashFiles('edge-plan.json', 'tools/edge-requirements.lock') }}-
+      - name: Generate and verify all Chinese character audio
+        run: python tools/edge-generate.py --plan edge-plan.json --site _site --cache .edge-audio-cache --concurrency 2
+      - name: Validate complete voice coverage
+        run: python tools/validate-edge-build.py
+      - uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: .edge-audio-cache
+          key: ${{ runner.os }}-edge-v4-${{ hashFiles('edge-plan.json', 'tools/edge-requirements.lock') }}-${{ github.run_id }}-${{ github.run_attempt }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: _site
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v5
