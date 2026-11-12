@@ -100,7 +100,7 @@ async def main(args):
  (site/'EDGE_VOICE_REPORT.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
  version=site/'VERSION.json'
  if version.exists():
-  d=json.loads(version.read_text());d.update(version='0.4.0-edge-voice',voiceEngine='Edge TTS',voicedLines=len(entries),voiceComplete=complete,formalVoiceFiles=report['audioFiles'],voiceCharacters=len(plan['cast']),baseVoiceCount=len({v['voice'] for v in plan['cast'].values()}));version.write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
+  d=json.loads(version.read_text());d.update(voiceEngine='Edge TTS',voicedLines=len(entries),voiceComplete=complete,formalVoiceFiles=report['audioFiles'],voiceCharacters=len(plan['cast']),baseVoiceCount=len({v['voice'] for v in plan['cast'].values()}));version.write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
  sums={str(p.relative_to(site)):hashlib.sha256(p.read_bytes()).hexdigest() for p in site.rglob('*') if p.is_file() and p.name!='SHA256SUMS.json'};(site/'SHA256SUMS.json').write_text(json.dumps(sums,indent=2)+'\n')
  print(json.dumps(report,ensure_ascii=False),flush=True)
  if errors or (not args.limit and not args.characters and not args.pilot and not complete):raise SystemExit(2)

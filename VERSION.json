@@ -1,6 +1,6 @@
 {
-  "version": "0.4.0-edge-voice",
-  "newImageCount": 23,
+  "version": "0.5.0-scene-ui",
+  "newImageCount": 25,
   "sourcePortraitDefinitionsMapped": 45,
   "storyEvents": 189,
   "browserViewports": [
@@ -38,5 +38,8 @@
   "physicalPhoneTested": false,
   "voiceEngine": "Edge TTS",
   "voiceComplete": false,
-  "voiceBuild": "generated and validated in GitHub Actions"
+  "voiceBuild": "generated and validated in GitHub Actions",
+  "specialSceneMappings": 13,
+  "sceneDialogueLayout": "separate by default",
+  "settingsPages": 3
 }
