@@ -1,5 +1,5 @@
 {
-  "version": "0.8.0-fullbody-props",
+  "version": "0.9.0-camera-collection",
   "newImageCount": 41,
   "sourcePortraitDefinitionsMapped": 45,
   "storyEvents": 189,
@@ -46,12 +46,16 @@
   "portraitAnimation": "eye-only painted blink keyframes",
   "wardrobeGroupsVerified": 29,
   "remainingCGCostumeDetails": true,
-  "portraitCamera": "complete-body with explicit story closeups; stable across dialogue and picture view",
+  "portraitCamera": "mobile HD head-to-upper-thigh camera; original art remains independent",
   "chapterReview": "read-only actual read history with save-state restoration",
   "directArtSwitch": true,
   "newFullBodyCostumes": 7,
   "storyPropTypes": 26,
   "storyPropStates": 27,
   "exactStoryPropLineCues": 318,
-  "artworkRecord": "ARTWORK_V08.md"
+  "artworkRecord": "ARTWORK_V08.md",
+  "artCollection": "source-key validated read-history unlocks, portrait/CG previews and described props",
+  "collectionProps": 27,
+  "collectionFullBodyToggle": true,
+  "legacyCollectionBackfill": true
 }
