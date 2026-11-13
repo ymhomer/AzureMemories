@@ -32,6 +32,7 @@
  class Collection{
   constructor(data,art,props,lines,stored){this.data=data;this.art=art;this.props=props;this.lines=lines;this.keys=new Set();if(stored?.schema===1&&stored.source===data.sourceHash)this.capture({source:stored.source,seen:stored.keys});}
   capture(snapshot){if(snapshot?.source!==this.data.sourceHash||!Array.isArray(snapshot.seen))return false;let changed=false;for(const key of snapshot.seen.slice(0,6000)){const line=this.lines.get(key);if(line?.text.trim()&&!this.keys.has(key)){this.keys.add(key);changed=true;}}return changed;}
+  groups(){const groups=new Map();for(const item of this.list().filter(x=>x.type==='portrait')){if(!groups.has(item.character))groups.set(item.character,{id:item.character,type:'person',title:item.title,representative:item,entries:[],outfits:[]});const g=groups.get(item.character);g.entries.push(item);if(g.representative.close&&!item.close)g.representative=item;if(!g.outfits.some(x=>x.id===item.outfit))g.outfits.push({id:item.outfit,title:item.outfitTitle});}return [...groups.values()];}
   serialize(){return JSON.stringify({schema:1,source:this.data.sourceHash,keys:[...this.keys]});}
   list(tab='people'){
    const result=new Map(),names=new Set([...this.keys].map(k=>this.lines.get(k)?.name));
@@ -40,8 +41,8 @@
    for(const key of this.keys){const line=this.lines.get(key),e=this.data.events.find(e=>e.id===line.scene);if(!e)continue;
     if(tab==='props'){const id=this.props.cues[key],p=this.props.items[id];if(p&&!result.has(id))result.set(id,{id,type:'prop',prop:id,title:p.title,description:descriptions[id]||'在旅途中看見的一件物品。',scene:e.title,key});continue;}
     const sprite=this.art.scenePortraits[e.id]||(line.portrait_mode===4?line.sprite_resource:null),m=this.art.portraits[sprite];
-    if(m){const close=!!this.art.scenePortraits[e.id]&&![71,104,121].includes(e.id),id='portrait:'+m.atlas+':'+m.cell+':'+close;if(!result.has(id))result.set(id,{id,type:'portrait',sprite,close,title:nameFor(sprite),subtitle:(outfits[m.outfit]||'人物美術')+(close?' · 劇情特寫':' · 立繪'),description:close?'旅途中已見過的情節特寫，保留那一刻的構圖與神情。':'旅途中實際見過的表情與服裝。可切換全身構圖或拉近欣賞細節。',scene:e.title,key});}
-    for(const bg of e.backgrounds){if(!bg.startsWith('map030')||!this.art.backgrounds[bg])continue;const id='cg:'+bg;if(!result.has(id))result.set(id,{id,type:'cg',image:this.art.backgrounds[bg],title:'旅途中的一瞬',subtitle:'劇情畫面',description:'在這段旅途中，已經看過的故事畫面。',scene:e.title,key});}
+    if(m&&tab!=='special'){const close=!!this.art.scenePortraits[e.id]&&![71,104,121].includes(e.id),id='portrait:'+m.atlas+':'+m.cell+':'+close;if(!result.has(id))result.set(id,{id,type:'portrait',sprite,close,character:sprite.startsWith('close-')?'xingnai':sprite.startsWith('1')?'xingnai':sprite.startsWith('2')?'xingsha':sprite.startsWith('3')?'sawa':'liuman',outfit:m.outfit,outfitTitle:outfits[m.outfit]||'人物美術',title:nameFor(sprite),subtitle:(outfits[m.outfit]||'人物美術')+(close?' · 劇情特寫':' · 立繪'),description:close?'旅途中已見過的情節特寫，保留那一刻的構圖與神情。':'旅途中實際見過的表情與服裝。可切換全身構圖或拉近欣賞細節。',scene:e.title,key});}
+    for(const bg of e.backgrounds){if(!bg.startsWith('map030')||!this.art.backgrounds[bg])continue;const id='cg:'+bg;if(!result.has(id))result.set(id,{id,type:'cg',image:this.art.backgrounds[bg],title:({'map03001':'意外的靠近','map03002':'煙火下的合照','map03003':'海風中的心意'})[this.art.backgrounds[bg]]||'旅途中的一瞬',subtitle:'劇情畫面',description:'在這段旅途中，已經看過的故事畫面。',scene:e.title,key});}
    }return [...result.values()];
   }
  }

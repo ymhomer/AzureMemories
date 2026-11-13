@@ -1,5 +1,5 @@
 {
-  "version": "0.9.0-camera-collection",
+  "version": "0.10.0-grouped-collection",
   "newImageCount": 41,
   "sourcePortraitDefinitionsMapped": 45,
   "storyEvents": 189,
@@ -57,5 +57,12 @@
   "artCollection": "source-key validated read-history unlocks, portrait/CG previews and described props",
   "collectionProps": 27,
   "collectionFullBodyToggle": true,
-  "legacyCollectionBackfill": true
+  "legacyCollectionBackfill": true,
+  "collectionCategories": [
+    "人物",
+    "特別繪圖",
+    "道具"
+  ],
+  "collectionPeopleGrouping": "character then discovered costume and expression",
+  "collectionVisualStyle": "chapter-memory scenery cards"
 }
