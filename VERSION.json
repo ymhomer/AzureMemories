@@ -1,6 +1,6 @@
 {
-  "version": "0.7.0-camera-chapters",
-  "newImageCount": 28,
+  "version": "0.8.0-fullbody-props",
+  "newImageCount": 41,
   "sourcePortraitDefinitionsMapped": 45,
   "storyEvents": 189,
   "browserViewports": [
@@ -34,7 +34,7 @@
     ]
   ],
   "endingRoutesPassed": 2,
-  "voiceLifecycleChecksPassed": 10,
+  "voiceLifecycleChecksPassed": 7,
   "physicalPhoneTested": false,
   "voiceEngine": "Edge TTS",
   "voiceComplete": false,
@@ -46,7 +46,12 @@
   "portraitAnimation": "eye-only painted blink keyframes",
   "wardrobeGroupsVerified": 29,
   "remainingCGCostumeDetails": true,
-  "portraitCamera": "viewport-anchored with lower-edge overscan",
+  "portraitCamera": "complete-body with explicit story closeups; stable across dialogue and picture view",
   "chapterReview": "read-only actual read history with save-state restoration",
-  "directArtSwitch": true
+  "directArtSwitch": true,
+  "newFullBodyCostumes": 7,
+  "storyPropTypes": 26,
+  "storyPropStates": 27,
+  "exactStoryPropLineCues": 318,
+  "artworkRecord": "ARTWORK_V08.md"
 }
