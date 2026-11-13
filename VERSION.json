@@ -1,5 +1,5 @@
 {
-  "version": "0.6.0-wardrobe-motion",
+  "version": "0.7.0-camera-chapters",
   "newImageCount": 28,
   "sourcePortraitDefinitionsMapped": 45,
   "storyEvents": 189,
@@ -45,5 +45,8 @@
   "dialoguePanel": "fixed height in both modes",
   "portraitAnimation": "eye-only painted blink keyframes",
   "wardrobeGroupsVerified": 29,
-  "remainingCGCostumeDetails": true
+  "remainingCGCostumeDetails": true,
+  "portraitCamera": "viewport-anchored with lower-edge overscan",
+  "chapterReview": "read-only actual read history with save-state restoration",
+  "directArtSwitch": true
 }
