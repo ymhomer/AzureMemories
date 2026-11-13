@@ -1,6 +1,6 @@
 {
-  "version": "0.5.0-scene-ui",
-  "newImageCount": 25,
+  "version": "0.6.0-wardrobe-motion",
+  "newImageCount": 28,
   "sourcePortraitDefinitionsMapped": 45,
   "storyEvents": 189,
   "browserViewports": [
@@ -41,5 +41,9 @@
   "voiceBuild": "generated and validated in GitHub Actions",
   "specialSceneMappings": 13,
   "sceneDialogueLayout": "separate by default",
-  "settingsPages": 3
+  "settingsPages": 3,
+  "dialoguePanel": "fixed height in both modes",
+  "portraitAnimation": "eye-only painted blink keyframes",
+  "wardrobeGroupsVerified": 29,
+  "remainingCGCostumeDetails": true
 }

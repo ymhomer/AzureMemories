@@ -12,3 +12,16 @@ dialog{padding:16px 22px;border:1px solid #a2c4d7;outline:3px solid #f3f8f144;bo
 #game[data-illustrated=true] #portrait[data-remake=true]{height:100%;width:auto;max-width:none;bottom:0}
 
 @media(orientation:portrait){#game[data-illustrated=true] #portrait[data-atlas=closeup-lean-v05]{height:88%}}
+
+/* v0.6: stable script panel; character bounds are trimmed before display. */
+:root{--dialogue-height:clamp(178px,26dvh,238px)}
+.game-card{grid-template-rows:minmax(0,1fr) var(--dialogue-height)}
+#game:is([data-mode=dialogue],[data-mode=system]) .dialogue{height:var(--dialogue-height);min-height:var(--dialogue-height);max-height:var(--dialogue-height)}
+#game:is([data-mode=dialogue],[data-mode=system]) .speaker-line{display:flex;min-height:24px;height:24px;margin:0 0 4px;flex-shrink:0}
+#game[data-named=false]:is([data-mode=dialogue],[data-mode=system]) .speaker-line{visibility:hidden}
+#game:is([data-mode=dialogue],[data-mode=system]) .line{flex:1 1 0;min-height:0;max-height:none}
+#portrait[data-remake=true]{height:96%;width:auto;max-width:none;max-height:none;object-fit:contain;object-position:bottom;bottom:0;animation:none}
+body[data-layout=overlay] #game[data-mode=dialogue] #portrait[data-remake=true]{height:calc(100% - var(--dialogue-height) * .6);bottom:calc(var(--dialogue-height) * .6);max-width:none;top:auto}
+body[data-layout=overlay] #game[data-illustrated=true] #portrait[data-remake=true]{height:calc(100% - var(--dialogue-height) * .45);bottom:calc(var(--dialogue-height) * .45)}
+@media(orientation:portrait){#portrait[data-remake=true]{height:96%;max-width:none}body[data-layout=overlay] #game[data-mode=dialogue] #portrait[data-remake=true]{height:calc(100% - var(--dialogue-height) * .65);bottom:calc(var(--dialogue-height) * .65)}}
+@media(max-height:480px) and (orientation:landscape){:root{--dialogue-height:clamp(120px,35dvh,158px)}#game:is([data-mode=dialogue],[data-mode=system]) .speaker-line{height:18px;min-height:18px;margin-bottom:2px}}
