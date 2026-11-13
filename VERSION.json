@@ -1,5 +1,5 @@
 {
-  "version": "0.10.0-grouped-collection",
+  "version": "0.11.0-layered-viewer",
   "newImageCount": 41,
   "sourcePortraitDefinitionsMapped": 45,
   "storyEvents": 189,
@@ -56,7 +56,7 @@
   "artworkRecord": "ARTWORK_V08.md",
   "artCollection": "source-key validated read-history unlocks, portrait/CG previews and described props",
   "collectionProps": 27,
-  "collectionFullBodyToggle": true,
+  "collectionFullBodyToggle": false,
   "legacyCollectionBackfill": true,
   "collectionCategories": [
     "人物",
@@ -64,5 +64,8 @@
     "道具"
   ],
   "collectionPeopleGrouping": "character then discovered costume and expression",
-  "collectionVisualStyle": "chapter-memory scenery cards"
+  "collectionVisualStyle": "chapter-memory scenery cards",
+  "collectionFullscreenViewer": "in-page immersive fit-to-art view",
+  "collectionNavigation": "bounded current-character and collected-tag scope; arrows, keyboard and horizontal swipe",
+  "collectionClose": "one level at a time: viewer, preview, filtered list, character directory, story"
 }
