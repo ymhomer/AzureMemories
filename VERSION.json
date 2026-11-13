@@ -1,6 +1,6 @@
 {
-  "version": "0.12.0-reading-routes",
-  "newImageCount": 41,
+  "version": "0.13.0-original-composition",
+  "newImageCount": 44,
   "sourcePortraitDefinitionsMapped": 45,
   "storyEvents": 189,
   "browserViewports": [
@@ -76,5 +76,11 @@
   "subtitleTiming": "actual sentence anchors plus proportional in-sentence display splitting",
   "audioTransport": "bounded two-element reuse; pause/resume preserves position",
   "chapterTree": "recorded read-sequence variants only; linear replay without choices",
-  "partialPortraitCameraReviewPending": true
+  "partialPortraitCameraReviewPending": false,
+  "originalCompositionIndependent": true,
+  "artSpecificPreferences": true,
+  "collectionOriginalEdition": true,
+  "collectionExpandIcon": true,
+  "correctedSawaCostumes": true,
+  "sourceRingVariants": true
 }
