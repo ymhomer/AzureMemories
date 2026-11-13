@@ -35,7 +35,19 @@ def align(batch,marks):
   start=max(0,events[0]['offset']/1e7-.04);end=max((m['offset']+m['duration'])/1e7 for m in events)+.12
   if i+1<len(found):end=min(end,found[i+1][0]['offset']/1e7-.06)
   if end<=start:raise ValueError('Invalid clip duration')
-  clips.append({'start':round(start,4),'end':round(end,4)})
+  original=batch[i]['text'];positions=[]
+  for index,char in enumerate(original):
+   positions.extend([index]*len(normalized(char)))
+  cues=[];cursor=0
+  if ''.join(normalized(c) for c in original)==targets[i]:
+   for n,m in enumerate(events):
+    count=len(normalized(m['text']));next_cursor=cursor+count
+    first=0 if n==0 else positions[cursor]
+    last=positions[next_cursor] if next_cursor<len(positions) else len(original)
+    cue_start=max(start,m['offset']/1e7);cue_end=min(end,(m['offset']+m['duration'])/1e7)
+    if cue_end>cue_start:cues.append({'start':round(cue_start,4),'end':round(cue_end,4),'textStart':first,'textEnd':last,'normStart':cursor,'normEnd':next_cursor})
+    cursor=next_cursor
+  clips.append({'start':round(start,4),'end':round(end,4),'cues':cues})
  return clips
 
 async def main(args):

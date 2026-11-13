@@ -1,5 +1,5 @@
 {
-  "version": "0.11.0-layered-viewer",
+  "version": "0.12.0-reading-routes",
   "newImageCount": 41,
   "sourcePortraitDefinitionsMapped": 45,
   "storyEvents": 189,
@@ -67,5 +67,14 @@
   "collectionVisualStyle": "chapter-memory scenery cards",
   "collectionFullscreenViewer": "in-page immersive fit-to-art view",
   "collectionNavigation": "bounded current-character and collected-tag scope; arrows, keyboard and horizontal swipe",
-  "collectionClose": "one level at a time: viewer, preview, filtered list, character directory, story"
+  "collectionClose": "one level at a time: viewer, preview, filtered list, character directory, story",
+  "readingProfiles": 5,
+  "textReadingCps": 6,
+  "textReadingStartMs": 1000,
+  "textReadingMinimumMs": 2200,
+  "audioTailMs": 450,
+  "subtitleTiming": "actual sentence anchors plus proportional in-sentence display splitting",
+  "audioTransport": "bounded two-element reuse; pause/resume preserves position",
+  "chapterTree": "recorded read-sequence variants only; linear replay without choices",
+  "partialPortraitCameraReviewPending": true
 }
