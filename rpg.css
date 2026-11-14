@@ -7,3 +7,18 @@
 
 /* Explicit map contrast overrides choice-button inherited text colors. */
 #choices .wayfinding-map button.map-destination,#choices .wayfinding-map button.map-destination strong{color:#19394a!important;opacity:1!important;text-shadow:none!important}#choices .wayfinding-map button.map-destination small{color:#43513e!important;opacity:1!important}#choices .wayfinding-map button.map-destination .map-pin{color:#705225!important;opacity:1!important}#choices .wayfinding-map button.map-destination:disabled{opacity:1!important}#choices .map-note{color:#43513e!important}
+
+/* 1.2.1: parchment controls require explicit dark text, including route entry. */
+#game #interactions button.scene-hotspot{color:#19394a!important;background:linear-gradient(110deg,#fff8e9,#e3dcc9)!important;opacity:1;text-shadow:none}
+#game #interactions button.scene-hotspot small{color:#43513e!important;font-size:11px;opacity:1}
+#game #interactions button.scene-hotspot .hotspot-icon{color:#705225!important;opacity:1}
+#game #choices button.context-option,#game #choices button.context-option .context-copy strong{color:#19394a!important;text-shadow:none}
+#game #choices button.context-option .context-copy small{color:#43513e!important;font-size:12px;opacity:1}
+#game #choices button.context-option:disabled{opacity:1}
+#game #choices button.context-option.selected{background:#274f60!important}
+#game #choices button.context-option.selected .context-copy strong,#game #choices button.context-option.selected .context-copy small{color:#fff5db!important}
+#game #interactions button.scene-hotspot:focus-visible,#game #choices button.context-option:focus-visible{outline:3px solid #274f60;outline-offset:3px}
+
+#game #choices .route-controls button{color:#19394a!important;background:#f6f9ed!important;opacity:1;text-shadow:none}
+#game #choices .wayfinding-map button.map-destination.selected{background:#274f60!important;color:#fff5db!important;opacity:1}
+#game #choices .wayfinding-map button.map-destination.selected strong,#game #choices .wayfinding-map button.map-destination.selected small,#game #choices .wayfinding-map button.map-destination.selected .map-pin{color:#fff5db!important}

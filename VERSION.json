@@ -1,5 +1,5 @@
 {
-  "version": "1.2.0",
+  "version": "1.2.1",
   "newImageCount": 49,
   "sourcePortraitDefinitionsMapped": 45,
   "storyEvents": 189,
@@ -111,5 +111,7 @@
   "portraitExpressions": "single-texture local mesh deformation, smooth blink, subtle mouth deformation",
   "hdFullBodyRestored": true,
   "portraitFaceOverlays": false,
-  "portraitMotionRespectsEffects": true
+  "portraitMotionRespectsEffects": true,
+  "blinkSetting": "選單→系統→閱讀設定→畫面→角色眨眼; saved browser preference",
+  "interactionContrast": "explicit dark text on parchment, selected white on dark; route entry, destinations and contextual choices"
 }
