@@ -1,5 +1,5 @@
 {
-  "version": "1.0.1",
+  "version": "1.1.0",
   "newImageCount": 49,
   "sourcePortraitDefinitionsMapped": 45,
   "storyEvents": 189,
@@ -105,5 +105,7 @@
   "imageLoading": "decoded opening assets, predictive branch preload, gated scene changes, retry on failure",
   "decodedImageCacheBudgetBytes": 50331648,
   "unifiedRoadSigns": true,
-  "routePagination": false
+  "routePagination": false,
+  "photographicStyle": true,
+  "syntheticBattleHealth": false
 }
