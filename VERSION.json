@@ -1,5 +1,5 @@
 {
-  "version": "1.1.3",
+  "version": "1.2.0",
   "newImageCount": 49,
   "sourcePortraitDefinitionsMapped": 45,
   "storyEvents": 189,
@@ -43,7 +43,7 @@
   "sceneDialogueLayout": "separate by default",
   "settingsPages": 3,
   "dialoguePanel": "fixed height in both modes",
-  "portraitAnimation": "eye-only painted blink keyframes",
+  "portraitAnimation": "WebGL vertex deformation with static fallback",
   "wardrobeGroupsVerified": 29,
   "remainingCGCostumeDetails": true,
   "portraitCamera": "mobile HD head-to-upper-thigh camera; original art remains independent",
@@ -108,6 +108,8 @@
   "routePagination": false,
   "photographicStyle": true,
   "syntheticBattleHealth": false,
-  "portraitExpressions": "HD full-body original face, no face or eye patches; photographic style unchanged",
-  "hdFullBodyRestored": true
+  "portraitExpressions": "single-texture local mesh deformation, smooth blink, subtle mouth deformation",
+  "hdFullBodyRestored": true,
+  "portraitFaceOverlays": false,
+  "portraitMotionRespectsEffects": true
 }
