@@ -1,5 +1,5 @@
 {
-  "version": "0.14.0-romance-finale",
+  "version": "1.0.0",
   "newImageCount": 49,
   "sourcePortraitDefinitionsMapped": 45,
   "storyEvents": 189,
@@ -92,5 +92,14 @@
   "formalVoiceFiles": 0,
   "voicedLines": 0,
   "contextualReviewShakes": true,
-  "crossSceneShakeAfterTransition": true
+  "crossSceneShakeAfterTransition": true,
+  "aboutPage": "auto-scrolling credits with pause, speed and manual reading",
+  "contextualInteractions": true,
+  "openingPreload": true,
+  "menuCategories": [
+    "旅程",
+    "閱讀",
+    "回憶",
+    "系統"
+  ]
 }

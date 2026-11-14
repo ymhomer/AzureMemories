@@ -1,0 +1,10 @@
+'use strict';
+(()=>{let lockedUntil=0;const fingers=new Set();const lock=()=>lockedUntil=performance.now()+500;
+ document.addEventListener('touchstart',e=>{if(e.touches.length>1){lock();e.preventDefault();}},{passive:false,capture:true});
+ document.addEventListener('touchmove',e=>{if(e.touches.length>1){lock();e.preventDefault();}},{passive:false,capture:true});
+ for(const type of ['gesturestart','gesturechange','gestureend'])document.addEventListener(type,e=>{lock();e.preventDefault();},{passive:false,capture:true});
+ document.addEventListener('pointerdown',e=>{if(e.pointerType==='touch'){fingers.add(e.pointerId);if(fingers.size>1)lock();}},{capture:true});
+ for(const type of ['pointerup','pointercancel'])document.addEventListener(type,e=>{if(fingers.size>1)lock();fingers.delete(e.pointerId);},{capture:true});
+ document.addEventListener('click',e=>{if(performance.now()<lockedUntil){e.preventDefault();e.stopImmediatePropagation();}},true);
+ document.addEventListener('wheel',e=>{if(e.ctrlKey){lock();e.preventDefault();}},{passive:false,capture:true});
+})();
