@@ -90,5 +90,7 @@
   "sceneSpecificCgCostumes": true,
   "romanceInterface": true,
   "formalVoiceFiles": 0,
-  "voicedLines": 0
+  "voicedLines": 0,
+  "contextualReviewShakes": true,
+  "crossSceneShakeAfterTransition": true
 }
