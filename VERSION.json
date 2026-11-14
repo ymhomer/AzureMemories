@@ -1,6 +1,6 @@
 {
-  "version": "0.13.0-original-composition",
-  "newImageCount": 44,
+  "version": "0.14.0-romance-finale",
+  "newImageCount": 49,
   "sourcePortraitDefinitionsMapped": 45,
   "storyEvents": 189,
   "browserViewports": [
@@ -82,5 +82,13 @@
   "collectionOriginalEdition": true,
   "collectionExpandIcon": true,
   "correctedSawaCostumes": true,
-  "sourceRingVariants": true
+  "sourceRingVariants": true,
+  "semanticSpeechEdition": 5,
+  "endingKeepsakes": 2,
+  "endingUnlockProof": "original-ending-state-or-read-final-card",
+  "sourceShakeCommands": 17,
+  "sceneSpecificCgCostumes": true,
+  "romanceInterface": true,
+  "formalVoiceFiles": 0,
+  "voicedLines": 0
 }

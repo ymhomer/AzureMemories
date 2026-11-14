@@ -32,8 +32,8 @@ def align(batch,marks):
  if cursor!=len(joined) or any(not x for x in found):raise ValueError('Incomplete boundary coverage')
  clips=[]
  for i,events in enumerate(found):
-  start=max(0,events[0]['offset']/1e7-.04);end=max((m['offset']+m['duration'])/1e7 for m in events)+.12
-  if i+1<len(found):end=min(end,found[i+1][0]['offset']/1e7-.06)
+  start=max(0,events[0]['offset']/1e7-.055);tail=.32 if re.search(r'[.…]{2,}[」』”’）)]*$',batch[i]['text']) else .18;end=max((m['offset']+m['duration'])/1e7 for m in events)+tail
+  if i+1<len(found):end=min(end,found[i+1][0]['offset']/1e7-.025)
   if end<=start:raise ValueError('Invalid clip duration')
   original=batch[i]['text'];positions=[]
   for index,char in enumerate(original):
@@ -90,7 +90,7 @@ async def main(args):
  async def process(cid,batch):
   nonlocal completed
   async with sem:
-   profile=plan['cast'][cid];text='\n'.join(u['text']+'。' for u in batch)
+   profile=plan['cast'][cid];text='\n'.join(u['text'] if re.search(r'[。.!?！？…][」』”’）)]*$',u['text']) else u['text']+'。' for u in batch)
    try:
     key,audio,marks=await synth(text,profile,[u['id'] for u in batch])
     try:
@@ -106,7 +106,7 @@ async def main(args):
    await asyncio.sleep(.35)
  await asyncio.gather(*(process(cid,b) for cid,b in selected))
  complete=not errors and len(entries)==plan['spokenLineCount']
- manifest={'edition':4,'engine':'Edge TTS 7.3.1','complete':complete,'sourceHash':plan['sourceHash'],'cast':plan['cast'],'voicedLines':len(entries),'expectedVoicedLines':plan['spokenLineCount'],'entries':entries}
+ manifest={'edition':5,'engine':'Edge TTS 7.3.1','complete':complete,'sourceHash':plan['sourceHash'],'cast':plan['cast'],'voicedLines':len(entries),'expectedVoicedLines':plan['spokenLineCount'],'entries':entries}
  (site/'edge-voice-manifest.js').write_text('globalThis.AzureEdgeVoices='+json.dumps(manifest,ensure_ascii=False,separators=(',',':'))+';globalThis.AzureRemakeManifest.voices=AzureEdgeVoices.entries;\n')
  report={'complete':complete,'voicedLines':len(entries),'expectedVoicedLines':plan['spokenLineCount'],'totalDialogueKeys':plan['totalDialogueKeys'],'skippedCardsAndNonverbal':len(plan['skipped']),'uniqueUtterances':len(plan['utterances']),'audioFiles':len(list(audio_dir.glob('*.mp3'))),'audioBytes':sum(p.stat().st_size for p in audio_dir.glob('*.mp3')),'batches':len(selected),'plannedBatches':len(work),'stats':stats,'errors':errors,'notes':plan['notes']}
  (site/'EDGE_VOICE_REPORT.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')

@@ -1,8 +1,8 @@
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.AzureEngine=api})(globalThis,()=>{
 'use strict';const copy=x=>JSON.parse(JSON.stringify(x));
 class Engine{
- constructor(data){this.data=data;this.events=new Map(data.events.map(e=>[e.id,e]));this.state=null;this.waiting=null;this.stack=[];this.autoSeen=[];this.history=[];this.seen=[];this.notes=[];this.sceneSerial=0;}
- start(){this.state={scene:5,flags:Array(256).fill(false),variables:Array(64).fill(0),self:{},party:[],music:'',portrait:null,chapter:0};this.history=[];this.seen=[];this.stack=[];this.waiting=null;this.autoSeen=[];this.notes=[];return this.enter(5);}
+ constructor(data){this.data=data;this.events=new Map(data.events.map(e=>[e.id,e]));this.state=null;this.waiting=null;this.stack=[];this.autoSeen=[];this.history=[];this.seen=[];this.notes=[];this.sceneSerial=0;this.visualEffects=[];}
+ start(){this.state={scene:5,flags:Array(256).fill(false),variables:Array(64).fill(0),self:{},party:[],music:'',portrait:null,chapter:0};this.history=[];this.seen=[];this.stack=[];this.waiting=null;this.autoSeen=[];this.notes=[];this.visualEffects=[];return this.enter(5);}
  pageMatches(p,actor){const t=p.trigger,s=this.state;return(t[1]<0||s.flags[t[1]])&&(t[2]<0||s.flags[t[2]])&&(t[3]<0||(s.variables[t[3]]||0)>=t[4])&&(t[5]<0||((s.self[s.scene+':'+actor.id]||0)&(1<<t[5]))!==0);}
  selected(actor){for(let i=actor.pages.length-1;i>=0;i--)if(this.pageMatches(actor.pages[i],actor))return{page:actor.pages[i],index:i};return null;}
  scene(){return this.events.get(this.state?.scene);}
@@ -14,7 +14,7 @@ class Engine{
  choose(index){if(this.waiting?.kind!=='choice')throw Error('目前沒有選項');const option=this.waiting.options[index];if(!option)throw Error('選項不存在');const actor=this.waiting.actor;this.history.push({kind:'choice',text:option.text,scene:this.state.scene});this.waiting=null;this.stack.push({commands:option.commands||[],at:0,actor});return this.run();}
  run(){let steps=0;while(++steps<1500){if(!this.stack.length){if(this.auto())continue;this.waiting={kind:'explore',actions:this.interactions()};return this.waiting;}
  const f=this.stack[this.stack.length-1];if(f.at>=f.commands.length){this.stack.pop();continue;}const c=f.commands[f.at++],v=c.values||[];
- if(c.kind==='dialogue'){const key=this.state.scene+':'+c.offset;this.state.portrait=c.portrait_mode===4?c.sprite_resource:null;const text=c.text;const match=this.data.chapters.findIndex(ch=>ch.heading===text);if(match>=0)this.state.chapter=match+1;this.waiting={...c,scene:this.state.scene,key};this.history.push({kind:'dialogue',name:c.has_name?c.name:'',text,scene:this.state.scene,offset:c.offset});this.history=this.history.slice(-300);return this.waiting;}
+ if(c.kind==='dialogue'){const key=this.state.scene+':'+c.offset;this.state.portrait=c.portrait_mode===4?c.sprite_resource:null;const text=c.text;const match=this.data.chapters.findIndex(ch=>ch.heading===text);if(match>=0)this.state.chapter=match+1;this.waiting={...c,scene:this.state.scene,key,effects:this.visualEffects.splice(0)};this.history.push({kind:'dialogue',name:c.has_name?c.name:'',text,scene:this.state.scene,offset:c.offset});this.history=this.history.slice(-300);return this.waiting;}
  if(c.kind==='scene_jump'){const id=v[0];if(!this.events.has(id)){this.waiting={kind:'missing',target:id,from:this.state.scene};return this.waiting;}this.state.scene=id;this.state.music=this.events.get(id).music;this.state.portrait=null;this.stack=[];this.autoSeen=[];this.sceneSerial++;continue;}
  if(c.kind==='choice'){const options=c.options.filter(o=>o.text&&(o.visibility_flag===0||this.state.flags[o.visibility_flag-1]));if(!options.length)throw Error('沒有符合條件的選項');this.waiting={kind:'choice',options,actor:f.actor,offset:c.offset};return this.waiting;}
  if(c.kind==='conditional'){let yes;if(c.mode===7)yes=!!this.state.flags[c.values[0]];else throw Error('尚未實作的條件模式 '+c.mode);this.stack.push({commands:(yes?c.then:c.else)||[],at:0,actor:f.actor});continue;}
@@ -23,7 +23,8 @@ class Engine{
  case 8:{const key=this.state.scene+':'+f.actor,bit=1<<v[0];this.state.self[key]=v[1]?(this.state.self[key]||0)|bit:(this.state.self[key]||0)&~bit;break;}
  case 10:this.waiting={kind:'savepoint'};return this.waiting;
  case 14:break; // World actor appearance. Dialogue portraits use their own exact sprite definition.
- case 23:case 26:case 42:case 44:case 49:break; // Presentation timing/effects; no story-state side effects.
+ case 23:this.visualEffects.push({kind:'shake',scene:this.state.scene,offset:c.offset,values:v});break;
+ case 26:case 42:case 44:case 49:break; // Presentation timing/effects; no story-state side effects.
  case 34:if(v[0]&&!this.state.party.includes(v[1]))this.state.party.push(v[1]);else if(!v[0])this.state.party=this.state.party.filter(x=>x!==v[1]);break;
  case 35:this.waiting={kind:'credits'};return this.waiting;
  case 40:this.waiting={kind:'ending'};return this.waiting;
@@ -31,7 +32,7 @@ class Engine{
  }
  }throw Error('劇情超過安全步數，已停止以避免無限跳轉');}
  snapshot(){return copy({schema:1,source:this.data.sourceHash,version:this.data.version,state:this.state,waiting:this.waiting,stack:this.stack,autoSeen:this.autoSeen,history:this.history.slice(-150),seen:this.seen.slice(-6000),sceneSerial:this.sceneSerial});}
- restore(s){if(!s||s.schema!==1||s.source!==this.data.sourceHash||!this.events.has(s.state?.scene)||!Array.isArray(s.state.flags)||s.state.flags.length!==256||!s.state.flags.every(x=>typeof x==='boolean')||!Array.isArray(s.state.variables)||s.state.variables.length!==64||!s.state.variables.every(Number.isFinite)||!Array.isArray(s.stack)||!Array.isArray(s.autoSeen)||!Array.isArray(s.history)||!Array.isArray(s.seen)||!['dialogue','choice','explore','savepoint','credits','ending','missing'].includes(s.waiting?.kind)||!s.state.self||typeof s.state.self!=='object'||Array.isArray(s.state.self)||!Array.isArray(s.state.party)||s.stack.length>100||!s.stack.every(f=>Array.isArray(f.commands)&&Number.isInteger(f.at)&&f.at>=0&&f.at<=f.commands.length))throw Error('存檔格式或劇本版本不相容');const x=copy(s);this.state=x.state;this.waiting=x.waiting;this.stack=x.stack;this.autoSeen=x.autoSeen;this.history=x.history;this.seen=x.seen;this.sceneSerial=x.sceneSerial||0;return this.waiting;}
+ restore(s){if(!s||s.schema!==1||s.source!==this.data.sourceHash||!this.events.has(s.state?.scene)||!Array.isArray(s.state.flags)||s.state.flags.length!==256||!s.state.flags.every(x=>typeof x==='boolean')||!Array.isArray(s.state.variables)||s.state.variables.length!==64||!s.state.variables.every(Number.isFinite)||!Array.isArray(s.stack)||!Array.isArray(s.autoSeen)||!Array.isArray(s.history)||!Array.isArray(s.seen)||!['dialogue','choice','explore','savepoint','credits','ending','missing'].includes(s.waiting?.kind)||!s.state.self||typeof s.state.self!=='object'||Array.isArray(s.state.self)||!Array.isArray(s.state.party)||s.stack.length>100||!s.stack.every(f=>Array.isArray(f.commands)&&Number.isInteger(f.at)&&f.at>=0&&f.at<=f.commands.length))throw Error('存檔格式或劇本版本不相容');const x=copy(s);this.visualEffects=[];this.state=x.state;this.waiting=x.waiting;this.stack=x.stack;this.autoSeen=x.autoSeen;this.history=x.history;this.seen=x.seen;this.sceneSerial=x.sceneSerial||0;return this.waiting;}
  markRead(){if(this.waiting?.key&&!this.seen.includes(this.waiting.key))this.seen.push(this.waiting.key);}
 }
 return{Engine};});

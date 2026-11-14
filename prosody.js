@@ -1,0 +1,9 @@
+'use strict';
+((root,factory)=>{const api=factory();root.AzureProsody=api;if(typeof module==='object'&&module.exports)module.exports=api;})(globalThis,()=>{
+ // Layout wraps are not linguistic pauses; preserve spaces inside Latin names.
+ function speech(text){return String(text||'').normalize('NFKC').trim().replace(/\s*\n\s*/gu,' ').replace(/([\p{Script=Han}，。！？；：、…])\s+(?=[\p{Script=Han}，。！？；：、…])/gu,'$1').replace(/\s+/gu,' ').replace(/[.．…]{2,}/gu,'……').replace(/[!！]{3,}/gu,'！！').replace(/[?？]{3,}/gu,'？？').replace(/[。]{2,}/gu,'。').replace(/\s+([，。！？；：、」』”’）)])/gu,'$1').trim();}
+ function terminal(text){const s=speech(text);return /[。.!?！？…][」』”’）)]*$/u.test(s)?s:s+'。';}
+ function clauses(text){const chars=Array.from(String(text)),out=[];let from=0;const closing=/[」』”’）)】》]/u;for(let i=0;i<chars.length;i++){if(!/[，。！？；：、,.!?;:\n…]/u.test(chars[i]))continue;while(i+1<chars.length&&(/[，。！？；：、,.!?;:…]/u.test(chars[i+1])||closing.test(chars[i+1])))i++;out.push({start:from,end:i+1,text:chars.slice(from,i+1).join('')});from=i+1;}if(from<chars.length)out.push({start:from,end:chars.length,text:chars.slice(from).join('')});return out;}
+ function captions(text,max=34){const units=clauses(text),out=[];let group=null;const push=()=>{if(group){out.push(group);group=null;}};for(const u of units){if(u.end-u.start>max){push();const a=Array.from(u.text);let at=0;while(at<a.length){let end=Math.min(a.length,at+max);if(end<a.length){const floor=at+Math.floor(max*.55);for(let i=end;i>=floor;i--){if(/[\s，、；：]/u.test(a[i-1])){end=i;break;}}while(end<a.length&&/[，。！？；：、,.!?;:」』”’）)】》…]/u.test(a[end]))end++;}out.push({start:u.start+at,end:u.start+end,text:a.slice(at,end).join('')});at=end;}continue;}if(group&&u.end-group.start>max)push();if(!group)group={...u};else{group.end=u.end;group.text+=u.text;}if(/[。！？!?…][」』”’）)]*$/u.test(u.text)&&group.end-group.start>=Math.min(12,max*.4))push();}push();return out;}
+ return{speech,terminal,clauses,captions};
+});

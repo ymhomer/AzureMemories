@@ -33,9 +33,9 @@ jobs:
         id: voice-cache
         with:
           path: .edge-audio-cache
-          key: ${{ runner.os }}-edge-v4-${{ hashFiles('edge-plan.json', 'tools/edge-requirements.lock') }}-${{ github.run_id }}-${{ github.run_attempt }}
+          key: ${{ runner.os }}-edge-v5-${{ hashFiles('edge-plan.json', 'tools/edge-requirements.lock') }}-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
-            ${{ runner.os }}-edge-v4-${{ hashFiles('edge-plan.json', 'tools/edge-requirements.lock') }}-
+            ${{ runner.os }}-edge-v5-${{ hashFiles('edge-plan.json', 'tools/edge-requirements.lock') }}-
       - name: Generate and verify all Chinese character audio
         run: python tools/edge-generate.py --plan edge-plan.json --site _site --cache .edge-audio-cache --concurrency 2
       - name: Validate complete voice coverage
@@ -44,7 +44,7 @@ jobs:
         if: always()
         with:
           path: .edge-audio-cache
-          key: ${{ runner.os }}-edge-v4-${{ hashFiles('edge-plan.json', 'tools/edge-requirements.lock') }}-${{ github.run_id }}-${{ github.run_attempt }}
+          key: ${{ runner.os }}-edge-v5-${{ hashFiles('edge-plan.json', 'tools/edge-requirements.lock') }}-${{ github.run_id }}-${{ github.run_attempt }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
