@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.1",
   "newImageCount": 49,
   "sourcePortraitDefinitionsMapped": 45,
   "storyEvents": 189,
@@ -95,11 +95,15 @@
   "crossSceneShakeAfterTransition": true,
   "aboutPage": "auto-scrolling credits with pause, speed and manual reading",
   "contextualInteractions": true,
-  "openingPreload": true,
+  "openingPreload": "manual entry after actual image readiness; explicit skip",
   "menuCategories": [
     "旅程",
     "閱讀",
     "回憶",
     "系統"
-  ]
+  ],
+  "imageLoading": "decoded opening assets, predictive branch preload, gated scene changes, retry on failure",
+  "decodedImageCacheBudgetBytes": 50331648,
+  "unifiedRoadSigns": true,
+  "routePagination": false
 }

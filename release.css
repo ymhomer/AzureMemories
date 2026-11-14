@@ -13,3 +13,5 @@ dialog[data-panel=about]{width:min(760px,calc(100vw - 24px));height:92dvh;max-he
 
 .wayfinding-map svg{pointer-events:none}#choices .wayfinding-map .map-destination{position:absolute}#choices .map-destination:before{display:none}
 #choices .wayfinding-map .map-destination:active{transform:translate(-50%,-50%)}
+
+#scene-loading{position:fixed;z-index:45;bottom:18%;left:50%;transform:translateX(-50%);max-width:90vw;padding:12px 20px;background:#173e4bee;color:#fff8e7;border:1px solid #b8ac87;border-radius:4px;font-size:13px;box-shadow:0 5px 25px #09232e44}#scene-loading button{margin:8px 4px 0;padding:8px 16px}#arrival-enter:disabled{opacity:.5}.arrival-copy #arrival-skip{font-size:11px;border:0;background:transparent;min-height:35px;padding:5px 15px}

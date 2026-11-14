@@ -1,0 +1,17 @@
+'use strict';
+((root)=>{
+ const cache=new Map(),pending=new Map(),D=root.AzureData,M=root.AzureRemakeManifest;let bytes=0,epoch=0;
+ const resolve=u=>D.assets?.[u]||u,hd=n=>'assets/hd/'+n+'.webp';
+ function trim(){for(const[k,v]of cache){if(cache.size<=8&&bytes<=48*1024*1024)break;cache.delete(k);bytes-=v.width*v.height*4;}}
+ function image(url){url=resolve(url);if(cache.has(url)){const im=cache.get(url);cache.delete(url);cache.set(url,im);return Promise.resolve(im);}if(pending.has(url))return pending.get(url);const job=new Promise((ok,no)=>{const im=new Image();let settled=false;const timer=setTimeout(()=>finish(Error('圖片準備逾時')),15000);function finish(error){if(settled)return;settled=true;clearTimeout(timer);im.onload=im.onerror=null;if(error){im.src='';no(error);return;}cache.set(url,im);bytes+=im.width*im.height*4;trim();ok(im);}im.onload=async()=>{try{await im.decode();finish();}catch{finish(Error('圖片解碼失敗'));}};im.onerror=()=>finish(Error('圖片下載失敗'));im.src=url;}).finally(()=>pending.delete(url));pending.set(url,job);return job;}
+ function assets(e,state,w,mode='hd'){const urls=[];if(!e)return urls;const add=n=>n&&urls.push(hd(n));if(mode==='hd'){if(!e.backgrounds.every(n=>n==='map01000.png'))add(M.sceneBackgrounds?.[e.id]||M.backgrounds?.[e.backgrounds[0]]);const key=M.scenePortraits?.[e.id]||state?.portrait,m=M.portraits?.[key];if(m){add(m.atlas);if((!M.scenePortraits?.[e.id]||[71,104,121].includes(e.id))&&!key.startsWith('close-')){add(M.fullBodies?.[m.outfit]?.atlas);add(m.accessory);if(['white-sundress','blue-sundress','pink-swimsuit'].includes(m.outfit))add('props-keepsakes-v08');}}const prop=root.AzurePropsManifest?.items[root.AzurePropsManifest?.cues[w?.key]];if(prop){add(prop.atlas);add(prop.photo);}}
+ // Native scene layers are also ready before switching edition or falling back.
+ for(const n of e.backgrounds)if(D.images[n])urls.push('assets/images/'+n);
+ if(mode==='original')for(const s of D.sprites[state?.portrait]?.sheets||[])urls.push(s.image);
+ return [...new Set(urls)];}
+ async function warm(urls,onProgress,valid=()=>true){const list=[...new Set(urls)];let at=0,finished=0,failure=null;await Promise.all(Array.from({length:2},async()=>{while(at<list.length&&valid()&&!failure){try{await image(list[at++]);if(!failure)onProgress?.(++finished,list.length);}catch(error){failure=error;}}}));if(failure)throw failure;return list.length;}
+
+ function ahead(engine,mode='hd',limit=12){const urls=[],clone=new root.AzureEngine.Engine(D);try{clone.restore(engine.snapshot());for(let i=0;i<limit;i++){urls.push(...assets(clone.scene(),clone.state,clone.waiting,mode));const w=clone.waiting;if(w.kind==='choice'){for(let n=0;n<w.options.length;n++){const branch=new root.AzureEngine.Engine(D);branch.restore(clone.snapshot());branch.choose(n);for(let j=0;j<6;j++){urls.push(...assets(branch.scene(),branch.state,branch.waiting,mode));if(branch.waiting.kind!=='dialogue')break;branch.next();}}break;}if(w.kind!=='dialogue')break;clone.next();}}catch{}return [...new Set(urls)];}
+ function prefetch(engine,mode){const token=++epoch,list=ahead(engine,mode).filter(u=>!cache.has(resolve(u)));setTimeout(()=>{if(token===epoch&&!document.hidden)warm(list,null,()=>token===epoch&&!document.hidden).catch(()=>{});},350);}
+ root.AzureResources={cancelPrefetch:()=>{epoch++;},image,assets,warm,ahead,prefetch,get stats(){return{decoded:cache.size,bytes,pending:pending.size}}};
+})(globalThis);
