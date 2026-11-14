@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0",
+  "version": "1.1.2",
   "newImageCount": 49,
   "sourcePortraitDefinitionsMapped": 45,
   "storyEvents": 189,
@@ -107,5 +107,6 @@
   "unifiedRoadSigns": true,
   "routePagination": false,
   "photographicStyle": true,
-  "syntheticBattleHealth": false
+  "syntheticBattleHealth": false,
+  "portraitExpressions": "whole authored frame; no face or eye patches"
 }
